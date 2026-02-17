@@ -1,8 +1,9 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-OOTHER_FLAGS = -lreadline
+LDFLAGS = -lreadline
 HEADER = minishell.h
 NAME = minishell
+
 SRC = main.c \
 	lexer/lexer.c \
 	lexer/lexer_quotes.c \
@@ -11,17 +12,23 @@ SRC = main.c \
 	utils/ft_split.c \
 	utils/ft_substr.c \
 	utils/ft_strdup.c \
+	utils/ft_strjoin.c \
 	utils/ft_strlen.c \
 	utils/ft_strncmp.c \
+	parser/parser.c \
+	parser/utils.c \
+	parser/freezers.c
+
 OBJ = $(SRC:.c=.o)
 RM = rm -f
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OOTHER_FLAGS) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LDFLAGS)
 
-$(OBJ): $(HEADER)
+%.o: %.c $(HEADER) lexer/lexer.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(OBJ)
