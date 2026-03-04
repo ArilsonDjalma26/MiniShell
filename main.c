@@ -6,33 +6,47 @@
 /*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 11:27:27 by aalbano           #+#    #+#             */
-/*   Updated: 2026/02/13 09:50:31 by elfranco         ###   ########.fr       */
+/*   Updated: 2026/03/02 16:36:11 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
-	t_token	*tokens;
-	t_cmd	*commands;
+	t_shell	*shell;
 
+	(void)argc;
+	(void)argv;
+	shell = (t_shell *)malloc(sizeof(t_shell));
+	if (!shell)
+		return (1);
+	shell->envs = initialize_envs(envp);
+	shell->last_exit = 0;
+	setup_signals_interactive();
 	while (1)
 	{
 		line = readline("minishell$ ");
 		if (!line)
 			break ;
+		if (g_signal_received)
+		{
+			shell->last_exit = 130;
+			g_signal_received = 0;
+		}
 		if (*line)
 		{
 			add_history(line);
-			tokens = lexer(line);
-			commands = parser(tokens);
-			print_cmds(commands);
-			free_cmd_list(commands);
-			free_tokens(tokens);
+			shell->tokens = lexer(line);
+			shell->commands = parser(shell->tokens, &shell);
+			if (shell->commands)
+				execute(&shell);
+			free_cmd_list(shell->commands);
+			free_tokens(shell->tokens);
 		}
 		free(line);
 	}
-	return (0);
+	return (shell->last_exit);
 }
+

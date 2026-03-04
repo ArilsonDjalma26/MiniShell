@@ -1,33 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/13 12:50:52 by elfranco          #+#    #+#             */
-/*   Updated: 2026/02/25 19:43:37 by elfranco         ###   ########.fr       */
+/*   Created: 2026/02/27 11:25:17 by elfranco          #+#    #+#             */
+/*   Updated: 2026/02/27 15:25:46 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
-t_token	*lexer(char *input)
+int	builtin_pwd(void)
 {
-	t_token *list;
-	int i;
+	char *cwd;
 
-	i = 0;
-	list = NULL;
-	while (input[i])
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
 	{
-		skip_space(input, &i);
-		if (!input[i])
-			break ;
-		if (is_operator(input[i]))
-			tokenize_operator(input, &i, &list);
-		else
-			tokenize_word(input, &i, &list);
+		perror("pwd");
+		return (1);
 	}
-	return (list);
+	write(STDOUT_FILENO, cwd, ft_strlen(cwd));
+	write(STDOUT_FILENO, "\n", 1);
+	free(cwd);
+	return (0);
 }

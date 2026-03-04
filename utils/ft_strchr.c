@@ -1,18 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbano <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/05 16:07:03 by aalbano           #+#    #+#             */
-/*   Updated: 2026/02/11 12:00:00 by aalbano          ###   ########.fr       */
+/*   Created: 2025/06/18 12:14:21 by elfranco          #+#    #+#             */
+/*   Updated: 2026/02/25 19:42:50 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#include "../minishell.h"
 
-# include "../minishell.h"
-
-#endif
+char	*ft_strchr(const char *s, int c)
+{
+	if (!s)
+		return (NULL);
+	while (*s)
+	{
+		if ((char)*s == (char)c)
+			return ((char *)s);
+		s++;
+	}
+	if ((char)c == '\0')
+		return ((char *)s);
+	return (NULL);
+}

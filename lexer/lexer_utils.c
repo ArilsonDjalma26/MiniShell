@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbano <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/05 15:40:28 by aalbano           #+#    #+#             */
-/*   Updated: 2026/02/11 12:00:00 by aalbano          ###   ########.fr       */
+/*   Updated: 2026/02/25 19:43:34 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int	is_quote(char c)
 
 int	is_env_char(char c)
 {
-	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-		|| (c >= '0' && c <= '9') || c == '_');
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0'
+			&& c <= '9') || c == '_');
 }
 
 char	*get_type_str(t_token_type type)
@@ -74,8 +74,8 @@ void	print_tokens(t_token *list)
 	printf("--- Tokens ---\n");
 	while (tmp)
 	{
-		printf("Token[%d]: %-10s | quote: %-6s | value: \"%s\"\n",
-			i, get_type_str(tmp->type), get_quote_str(tmp->quote), tmp->value);
+		printf("Token[%d]: %-10s | quote: %-6s | value: \"%s\"\n", i,
+			get_type_str(tmp->type), get_quote_str(tmp->quote), tmp->value);
 		tmp = tmp->next;
 		i++;
 	}
@@ -83,7 +83,7 @@ void	print_tokens(t_token *list)
 
 void	free_tokens(t_token *list)
 {
-	t_token	*tmp;
+	t_token *tmp;
 
 	while (list)
 	{

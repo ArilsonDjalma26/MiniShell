@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbano <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/05 15:39:59 by aalbano           #+#    #+#             */
-/*   Updated: 2026/02/13 12:00:00 by aalbano          ###   ########.fr       */
+/*   Updated: 2026/02/25 19:43:25 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,21 @@ static char	*extract_quoted(char *input, int *i, t_quote_type *quote_type)
 	int		start;
 	char	*value;
 
+	start = *i;
 	quote = input[*i];
 	if (quote == '"')
 		*quote_type = QUOTE_DOUBLE;
 	else if (quote == '\'')
 		*quote_type = QUOTE_SINGLE;
 	(*i)++;
-	start = *i;
 	while (input[*i] && input[*i] != quote)
 		(*i)++;
-	value = ft_substr(input, start, *i - start);
 	if (input[*i] == quote)
 		(*i)++;
+	value = ft_substr(input, start, *i - start);
 	return (value);
 }
+
 static char	*extract_env(char *input, int *i)
 {
 	int		start;
@@ -58,8 +59,7 @@ static char	*extract_plain(char *input, int *i)
 
 	start = *i;
 	while (input[*i] && input[*i] != ' ' && input[*i] != '\t'
-		&& !is_operator(input[*i]) && !is_quote(input[*i])
-		&& input[*i] != '$')
+		&& !is_operator(input[*i]) && !is_quote(input[*i]) && input[*i] != '$')
 		(*i)++;
 	if (*i > start)
 		value = ft_substr(input, start, *i - start);
@@ -96,11 +96,14 @@ static t_token_type	get_word_type(char *value, int has_env)
 }
 void	tokenize_word(char *input, int *i, t_token **list)
 {
-	char			*result = 0;
+	char			*result;
 	char			*part;
-	t_quote_type	qtype = QUOTE_NONE;
-	int				has_env = 0;
+	t_quote_type	qtype;
+	int				has_env;
 
+	result = 0;
+	qtype = QUOTE_NONE;
+	has_env = 0;
 	while (is_word_char(input[*i]))
 	{
 		if (input[*i] == '\'' || input[*i] == '"')
@@ -118,7 +121,6 @@ void	tokenize_word(char *input, int *i, t_token **list)
 		result = join_and_free(result, part);
 	}
 	if (result)
-		add_token(list, new_token(get_word_type(result, has_env), qtype, result));
+		add_token(list, new_token(get_word_type(result, has_env), qtype,
+				result));
 }
-
-
