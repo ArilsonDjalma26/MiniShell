@@ -1,39 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/13 13:10:32 by elfranco          #+#    #+#             */
+/*   Created: 2026/03/05 15:00:00 by elfranco          #+#    #+#             */
 /*   Updated: 2026/03/05 20:01:14 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+void	print_export_list(t_shell **shell)
 {
-	char	*substr;
-	size_t	i;
-	size_t	s_len;
+	t_env	*cur;
 
-	if (!s)
-		return (NULL);
-	s_len = ft_strlen(s);
-	if (start >= s_len)
-		return (ft_strdup(""));
-	if (len > s_len - start)
-		len = s_len - start;
-	substr = (char *)malloc((len + 1) * sizeof(char));
-	if (!substr)
-		return (NULL);
-	i = 0;
-	while (i < len && s[start + i])
+	cur = sort_list((*shell)->envs);
+	while (cur)
 	{
-		substr[i] = s[start + i];
-		i++;
+		if (cur->value != NULL)
+			printf("declare -x %s=\"%s\"\n", cur->key, cur->value);
+		else
+			printf("declare -x %s\n", cur->key);
+		cur = cur->next;
 	}
-	substr[i] = '\0';
-	return (substr);
 }

@@ -1,11 +1,11 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*   exec_cmd_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/26 18:00:00 by elfranco          #+#    #+#             */
+/*   Created: 2026/03/05 15:00:00 by elfranco          #+#    #+#             */
 /*   Updated: 2026/03/05 20:01:14 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -19,20 +19,36 @@ static void	free_partial_arr(char **arr, int i)
 	free(arr);
 }
 
-char	**cmd_args_to_array(t_cmd *cmd)
+static int	env_count(t_env *envs)
 {
-	char		**arr;
-	t_cmd_arg	*cur;
-	int			i;
+	int	count;
 
-	arr = (char **)malloc(sizeof(char *) * (cmd->argc + 1));
+	count = 0;
+	while (envs)
+	{
+		count++;
+		envs = envs->next;
+	}
+	return (count);
+}
+
+char	**env_to_array(t_env *envs)
+{
+	t_env	*cur;
+	char	**arr;
+	char	*tmp;
+	int		i;
+
+	arr = (char **)malloc(sizeof(char *) * (env_count(envs) + 1));
 	if (!arr)
 		return (NULL);
-	cur = cmd->args;
+	cur = envs;
 	i = 0;
 	while (cur)
 	{
-		arr[i] = ft_strdup(cur->value);
+		tmp = ft_strjoin(cur->key, "=");
+		arr[i] = ft_strjoin(tmp, cur->value);
+		free(tmp);
 		if (!arr[i])
 			return (free_partial_arr(arr, i), NULL);
 		cur = cur->next;
@@ -42,27 +58,11 @@ char	**cmd_args_to_array(t_cmd *cmd)
 	return (arr);
 }
 
-int	exec_builtin(t_cmd *cmd, t_shell **shell)
+void	close_shell(t_shell **shell, int exit_code)
 {
-	char	*name;
-
-	if (cmd->args)
-		name = cmd->args->value;
-	else
-		return (1);
-	if (ft_strcmp(name, "echo") == 0)
-		return (builtin_echo(cmd));
-	if (ft_strcmp(name, "pwd") == 0)
-		return (builtin_pwd());
-	if (ft_strcmp(name, "env") == 0)
-		return (builtin_env(*shell));
-	if (ft_strcmp(name, "cd") == 0)
-		return (builtin_cd(cmd, shell));
-	if (ft_strcmp(name, "exit") == 0)
-		return (builtin_exit(cmd, shell));
-	if (ft_strcmp(name, "export") == 0)
-		return (builtin_export(cmd, shell));
-	if (ft_strcmp(name, "unset") == 0)
-		return (builtin_unset(cmd, shell));
-	return (1);
+	free_cmd_list((*shell)->commands);
+	free_env_list((*shell)->envs);
+	free_tokens((*shell)->tokens);
+	free(*shell);
+	exit(exit_code);
 }

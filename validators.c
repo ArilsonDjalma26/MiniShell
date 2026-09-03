@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   validators.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/13 13:12:49 by elfranco          #+#    #+#             */
-/*   Updated: 2026/03/05 20:01:14 by elfranco         ###   ########.fr       */
+/*   Created: 2026/03/05 10:45:11 by elfranco          #+#    #+#             */
+/*   Updated: 2026/03/12 10:38:04 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
-char	*ft_strdup(const char *src)
+void	validate_args(int ac, char **av, char **envp)
 {
-	char		*newstr;
-	size_t		counter;
-
-	if (!src)
-		return (NULL);
-	newstr = (char *)malloc((ft_strlen(src) + 1) * sizeof(char));
-	if (!newstr)
-		return (NULL);
-	counter = 0;
-	while (src[counter] != '\0')
+	(void)av;
+	if (ac > 1)
 	{
-		newstr[counter] = src[counter];
-		counter++;
+		write(STDOUT_FILENO, "notthing expected: Success", 26);
+		exit(1);
 	}
-	newstr[counter] = '\0';
-	return (newstr);
+	if (!envp)
+	{
+		write(STDOUT_FILENO, "env structure initiaization: Fail", 33);
+		exit(1);
+	}
 }

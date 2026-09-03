@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elfranco <elfranco@student.42.fr>          +#+  +:+       +#+        */
+/*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 14:46:24 by elfranco          #+#    #+#             */
-/*   Updated: 2026/01/13 14:46:26 by elfranco         ###   ########.fr       */
+/*   Updated: 2026/03/05 20:01:14 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(char *s1, char *s2)
 {
-	int i = 0;
+	int	i;
 
-	while((s1[i] == s2[i]) && s1[i] && s2[i])
+	i = 0;
+	while (s1[i] == s2[i] && s1[i] && s2[i])
 		i++;
-	return (s1[i]-s2[i]);
+	return (s1[i] - s2[i]);
 }

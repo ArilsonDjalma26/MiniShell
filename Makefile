@@ -1,12 +1,15 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 HEADER = minishell.h
 NAME = minishell
 
 SRC = main.c \
+	initializers.c \
+	validators.c \
 	lexer/lexer.c \
 	lexer/lexer_quotes.c \
+	lexer/lexer_word.c \
 	lexer/lexer_tokens.c \
 	lexer/lexer_utils.c \
 	utils/ft_split.c \
@@ -25,11 +28,20 @@ SRC = main.c \
 	parser/parser.c \
 	parser/utils.c \
 	parser/parsers.c \
+	parser/parsers_heredoc.c \
+	parser/parse_redirs.c \
 	expander/expander.c \
+	expander/expander_heredoc.c \
 	expander/utils.c \
+	expander/quote_utils.c \
+	expander/expand_if_valid.c \
 	parser/freezers.c \
 	executor/executor.c \
+	executor/exec_pipeline.c \
+	executor/exec_child.c \
+	executor/exec_child_utils.c \
 	executor/exec_cmd.c \
+	executor/exec_cmd_utils.c \
 	executor/exec_path.c \
 	executor/exec_redir.c \
 	executor/utils.c \
@@ -38,6 +50,8 @@ SRC = main.c \
 	executor/built-in/pwd.c \
 	executor/built-in/env.c \
 	executor/built-in/export.c \
+	executor/built-in/export_cmd.c \
+	executor/built-in/export_utils.c \
 	executor/built-in/unset.c \
 	executor/built-in/exit.c \
 	signals/signals.c \

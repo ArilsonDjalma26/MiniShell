@@ -6,7 +6,7 @@
 /*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 13:12:14 by elfranco          #+#    #+#             */
-/*   Updated: 2025/06/24 13:13:44 by elfranco         ###   ########.fr       */
+/*   Updated: 2026/03/05 20:01:14 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,29 @@ static int	ft_count_numbers(int n)
 	return (i);
 }
 
+static void	ft_fill_result(char *result, long number, int len)
+{
+	len--;
+	while (number > 0)
+	{
+		result[len] = (number % 10) + '0';
+		number = number / 10;
+		len--;
+	}
+}
+
 char	*ft_itoa(int n)
 {
-	long		number;
-	int			numbers_len;
-	char		*result;
+	long	number;
+	int		len;
+	char	*result;
 
 	number = (long)n;
-	numbers_len = ft_count_numbers(n);
-	result = (char *)malloc((numbers_len + 1) * sizeof(char));
+	len = ft_count_numbers(n);
+	result = (char *)malloc((len + 1) * sizeof(char));
 	if (!result)
 		return (NULL);
-	result[numbers_len] = '\0';
+	result[len] = '\0';
 	if (n == 0)
 		result[0] = '0';
 	if (n < 0)
@@ -52,12 +63,6 @@ char	*ft_itoa(int n)
 		result[0] = '-';
 		number = -number;
 	}
-	numbers_len--;
-	while (number > 0)
-	{
-		result[numbers_len] = (number % 10) + '0';
-		number = number / 10;
-		numbers_len--;
-	}
+	ft_fill_result(result, number, len);
 	return (result);
 }

@@ -6,7 +6,7 @@
 /*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 18:00:00 by elfranco          #+#    #+#             */
-/*   Updated: 2026/02/27 15:06:25 by elfranco         ###   ########.fr       */
+/*   Updated: 2026/03/05 20:01:14 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,31 +26,35 @@ static char	*get_path_value(t_env *envs)
 	return (NULL);
 }
 
+static char	*try_path(char *dir, char *cmd)
+{
+	char	*tmp;
+	char	*full;
+
+	tmp = ft_strjoin(dir, "/");
+	if (!tmp)
+		return (NULL);
+	full = ft_strjoin(tmp, cmd);
+	free(tmp);
+	if (!full)
+		return (NULL);
+	if (access(full, F_OK | X_OK) == 0)
+		return (full);
+	free(full);
+	return (NULL);
+}
+
 static char	*search_in_paths(char *cmd, char **dirs)
 {
 	int		i;
-	char	*tmp;
-	char	*full;
+	char	*result;
 
 	i = 0;
 	while (dirs[i])
 	{
-		tmp = ft_strjoin(dirs[i], "/");
-		if (!tmp)
-		{
-			i++;
-			continue ;
-		}
-		full = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (!full)
-		{
-			i++;
-			continue ;
-		}
-		if (access(full, F_OK | X_OK) == 0)
-			return (full);
-		free(full);
+		result = try_path(dirs[i], cmd);
+		if (result)
+			return (result);
 		i++;
 	}
 	return (NULL);

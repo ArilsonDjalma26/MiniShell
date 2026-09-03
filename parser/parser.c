@@ -2,89 +2,55 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+
-	+:+     */
-/*   By: elfranco <marvin@42.fr>                    +#+  +:+
-	+#+        */
-/*                                                +#+#+#+#+#+
-	+#+           */
+/*                                                    +:+ +:+         +:+     */
+/*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:51:43 by elfranco          #+#    #+#             */
-/*   Updated: 2026/02/13 09:51:43 by elfranco         ###   ########.fr       */
+/*   Updated: 2026/03/12 17:45:51 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_cmd	*parser(t_token *token, t_shell **shell)
+static int	is_redir(t_token_type type)
 {
-	t_cmd *command_list;
-	t_cmd *command;
-	t_token *current_token;
-	int code;
-	int i;
+	return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT
+		|| type == TOKEN_APPEND || type == TOKEN_HEREDOC);
+}
+
+static int	parse_token(t_token **cur, t_cmd **cmd, t_cmd **list, t_shell **sh)
+{
+	int	i;
+	int	code;
 
 	i = 0;
 	code = 0;
-	current_token = token;
+	if ((*cur)->type == TOKEN_WORD || (*cur)->type == TOKEN_ENV)
+		code = parse_words(cur, &i, cmd, sh);
+	else if (is_redir((*cur)->type))
+		code = parse_redirs(cur, list, cmd, sh);
+	else if ((*cur)->type == TOKEN_PIPE)
+		code = parse_pipe(cur, cmd, list, sh);
+	return (code);
+}
+
+t_cmd	*parser(t_token *token, t_shell **shell)
+{
+	t_cmd	*command_list;
+	t_cmd	*command;
+	t_token	*curr_token;
+
+	curr_token = token;
 	command_list = create_cmd();
 	command = command_list;
-
-	while (current_token)
+	while (curr_token)
 	{
-		if (current_token->type == TOKEN_WORD
-			|| current_token->type == TOKEN_ENV)
-			code = parse_words(&current_token, &i, &command, shell);
-		else if (current_token->type == TOKEN_REDIR_IN
-			|| current_token->type == TOKEN_REDIR_OUT
-			|| current_token->type == TOKEN_APPEND
-			|| current_token->type == TOKEN_HEREDOC)
-			code = parse_redirs(&current_token, &command_list, &command, shell);
-		else if (current_token->type == TOKEN_PIPE)
-			code = parse_pipe(&current_token, &command, &command_list, shell);
-
-		if (code != 0)
+		if (parse_token(&curr_token, &command, &command_list, shell) != 0)
+		{
+			free_cmd_list(command_list);
+			command_list = NULL;
 			return (NULL);
+		}
 	}
 	return (command_list);
-}
-
-static const char	*redir_str(t_token_type type)
-{
-	if (type == TOKEN_REDIR_IN)
-		return ("<");
-	if (type == TOKEN_REDIR_OUT)
-		return (">");
-	if (type == TOKEN_APPEND)
-		return (">>");
-	if (type == TOKEN_HEREDOC)
-		return ("<<");
-	return ("?");
-}
-
-void	print_cmds(t_cmd *cmd_list)
-{
-	int i;
-	t_cmd_arg *arg;
-	t_redir *redir;
-
-	i = 0;
-	while (cmd_list)
-	{
-		printf("─── Cmd[%d] (%d args) ───\n", i, cmd_list->argc);
-		arg = cmd_list->args;
-		while (arg)
-		{
-			printf("  arg: \"%s\"\n", arg->value);
-			arg = arg->next;
-		}
-		redir = cmd_list->redirs;
-		while (redir)
-		{
-			printf("  redir: %s \"%s\"\n", redir_str(redir->type),
-				redir->file);
-			redir = redir->next;
-		}
-		cmd_list = cmd_list->next;
-		i++;
-	}
 }

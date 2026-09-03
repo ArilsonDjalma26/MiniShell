@@ -57,3 +57,19 @@ void	free_cmd_list(t_cmd *command_list)
 		current_cmd = temp;
 	}
 }
+
+void	free_env_list(t_env *env_list)
+{
+	t_env	*current_env;
+	t_env	*temp;
+
+	current_env = env_list;
+	while (current_env)
+	{
+		temp = current_env->next;
+		free(current_env->key);
+		free(current_env->value);
+		free(current_env);
+		current_env = temp;
+	}
+}

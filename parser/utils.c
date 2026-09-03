@@ -57,8 +57,12 @@ t_cmd	*create_cmd(void)
 
 void	print_error(char *message)
 {
-    char *complete_message = ft_strjoin("minishell: ", message);
-	complete_message = ft_strjoin(complete_message, "\n");
+	char	*tmp;
+	char	*complete_message;
+
+	tmp = ft_strjoin("minishell: ", message);
+	complete_message = ft_strjoin(tmp, "\n");
+	free(tmp);
 	write(STDERR_FILENO, complete_message, ft_strlen(complete_message));
 	free(complete_message);
 }

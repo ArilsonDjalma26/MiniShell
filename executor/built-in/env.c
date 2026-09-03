@@ -6,7 +6,7 @@
 /*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 11:25:45 by elfranco          #+#    #+#             */
-/*   Updated: 2026/03/03 11:50:45 by elfranco         ###   ########.fr       */
+/*   Updated: 2026/03/05 20:01:14 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 int	builtin_env(t_shell *shell)
 {
-	t_env *cur;
+	t_env	*cur;
 
 	if (!shell->envs)
 	{
-		write(STDERR_FILENO, "env: No environment variables\n", 29);
+		write(STDERR_FILENO, "env: No environment variables\n", 30);
 		return (-1);
 	}
 	cur = shell->envs;
 	while (cur)
 	{
-		if (cur->value || (cur->value && cur->value[0] == '\0'))
+		if (cur->value)
 		{
 			write(STDOUT_FILENO, cur->key, ft_strlen(cur->key));
 			write(STDOUT_FILENO, "=", 1);

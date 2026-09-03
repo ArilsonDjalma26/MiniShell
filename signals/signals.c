@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aalbano <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 12:00:00 by aalbano           #+#    #+#             */
-/*   Updated: 2026/03/04 12:00:00 by aalbano          ###   ########.fr       */
+/*   Updated: 2026/03/12 18:21:26 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,17 @@ void	setup_signals_interactive(void)
 
 void	setup_signals_exec(void)
 {
-	struct sigaction	sa;
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
 
-	sa.sa_handler = SIG_IGN;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	sa_int.sa_handler = handle_sigint_exec;
+	sa_int.sa_flags = 0;
+	sigemptyset(&sa_int.sa_mask);
+	sigaction(SIGINT, &sa_int, NULL);
+	sa_quit.sa_handler = SIG_IGN;
+	sa_quit.sa_flags = 0;
+	sigemptyset(&sa_quit.sa_mask);
+	sigaction(SIGQUIT, &sa_quit, NULL);
 }
 
 void	setup_signals_child(void)

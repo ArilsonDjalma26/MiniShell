@@ -6,7 +6,7 @@
 /*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 11:25:17 by elfranco          #+#    #+#             */
-/*   Updated: 2026/02/27 15:25:46 by elfranco         ###   ########.fr       */
+/*   Updated: 2026/03/05 20:01:14 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	builtin_pwd(void)
 {
-	char *cwd;
+	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)

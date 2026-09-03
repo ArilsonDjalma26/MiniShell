@@ -6,7 +6,7 @@
 /*   By: elfranco <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 12:50:52 by elfranco          #+#    #+#             */
-/*   Updated: 2026/02/25 19:43:37 by elfranco         ###   ########.fr       */
+/*   Updated: 2026/03/05 20:01:14 by elfranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 t_token	*lexer(char *input)
 {
-	t_token *list;
-	int i;
+	t_token	*list;
+	int		i;
 
 	i = 0;
 	list = NULL;

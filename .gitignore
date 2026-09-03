@@ -1,0 +1,8 @@
+
+.nfs*
+test*
+.env
+*.o
+minishell
+/minishell_tester
+.goutputstream-X3CNL3
